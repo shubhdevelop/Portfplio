@@ -29,7 +29,7 @@ export default function Hero() {
             <div className={`font-mono text-sm leading-relaxed mb-8 text-justify border-l-4 pl-4 ${
               isDarkMode ? 'text-zinc-300 border-zinc-700' : 'text-zinc-700 border-zinc-300'
             }`}>
-              I love figuring out how things work. All things backend and systems programming CPU, memory, Networking and everything in between.
+              I love figuring out how things work. All things backend, systems programming, CPU, memory, Networking and everything in between.
               projects: yapl (lang) | ykvs (db) | gb emulator (hardware) TS for money 💰| Go & C for fun | football | Code
             </div>
             
