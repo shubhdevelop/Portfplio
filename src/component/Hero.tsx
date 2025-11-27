@@ -23,13 +23,14 @@ export default function Hero() {
               NEW CHALLENGER APPROACHING
             </div>
             <h2 className={`font-pixel text-2xl md:text-3xl leading-snug mb-6 ${isDarkMode ? 'text-zinc-100' : 'text-zinc-900'}`}>
-              THE SYSTEMS <br/>
-              <span className={isDarkMode ? 'text-green-400' : 'text-red-700'}>VIRTUOSO</span>
+              SYSTEMS <br/>
+              <span className={isDarkMode ? 'text-green-400' : 'text-red-700'}>ENTHUSIAST</span>
             </h2>
             <div className={`font-mono text-sm leading-relaxed mb-8 text-justify border-l-4 pl-4 ${
               isDarkMode ? 'text-zinc-300 border-zinc-700' : 'text-zinc-700 border-zinc-300'
             }`}>
-              systems programming enthusiast. projects: yapl (lang) | ykvs (db) | gb emulator (hardware) TS for money 💰| Go & C for fun | football | Code
+              I love figuring out how things work. All things backend and systems programming CPU, memory, Networking and everything in between.
+              projects: yapl (lang) | ykvs (db) | gb emulator (hardware) TS for money 💰| Go & C for fun | football | Code
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4 font-pixel text-[10px] md:text-xs">
