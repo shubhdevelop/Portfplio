@@ -37,7 +37,7 @@ export default function App() {
             .pixelated { image-rendering: pixelated; }
           `}</style>
   
-          {/* <TextureOverlay /> */}
+          <TextureOverlay />
   
           <div className={`max-w-[1200px] mx-auto shadow-[0_0_0_4px_#1a1a1a] min-h-screen relative border-2 transition-colors ${
             isDarkMode ? 'bg-zinc-900 border-zinc-100 shadow-[0_0_0_4px_#f4f4f5]' : 'bg-[#fdfbf7] border-zinc-900'
