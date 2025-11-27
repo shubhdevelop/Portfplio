@@ -30,18 +30,24 @@ export default function GitHubStats() {
           <div className={`w-full overflow-hidden border-2 p-2 shadow-[4px_4px_0px_0px_#ccc] ${
             isDarkMode ? 'bg-zinc-900 border-zinc-100 shadow-[#555]' : 'bg-white border-zinc-900'
           }`}>
-            <img 
-              src={`https://ghchart.rshah.org/${chartColor}/shubhdevelop`} 
-              alt="Shubham's GitHub Contribution Graph" 
-              className={`w-full h-auto min-w-[600px] ${isDarkMode ? 'filter hue-rotate-360 contrast-100' : 'filter contrast-125'}`}
-              style={{ imageRendering: 'pixelated' }}
-            />
-              <img 
-              src={`https://ghchart.rshah.org/${chartColor}/shubham-complyance`} 
-              alt="Shubham's GitHub Contribution Graph" 
-              className={`w-full h-auto min-w-[600px] ${isDarkMode ? 'filter hue-rotate-360 contrast-100' : 'filter contrast-125'}`}
-              style={{ imageRendering: 'pixelated' }}
-            />
+            <div className="flex flex-col md:block gap-4">
+              <div className="flex justify-end md:justify-start">
+                <img 
+                  src={`https://ghchart.rshah.org/${chartColor}/shubhdevelop`} 
+                  alt="Shubham's GitHub Contribution Graph" 
+                  className={`h-auto min-w-[600px] md:w-full ${isDarkMode ? 'filter hue-rotate-360 contrast-100' : 'filter contrast-125'}`}
+                  style={{ imageRendering: 'pixelated' }}
+                />
+              </div>
+              <div className="flex justify-end md:justify-start">
+                <img 
+                  src={`https://ghchart.rshah.org/${chartColor}/shubham-complyance`} 
+                  alt="Shubham's GitHub Contribution Graph" 
+                  className={`h-auto min-w-[600px] md:w-full ${isDarkMode ? 'filter hue-rotate-360 contrast-100' : 'filter contrast-125'}`}
+                  style={{ imageRendering: 'pixelated' }}
+                />
+              </div>
+            </div>
           </div>
         </section>
   
