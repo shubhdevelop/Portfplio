@@ -1,4 +1,5 @@
 import { useTheme } from "@/hooks/theme";
+import Image from "next/image";
 
 export default function Hero() {
     const { isDarkMode } = useTheme();
@@ -22,7 +23,7 @@ export default function Hero() {
               NEW CHALLENGER APPROACHING
             </div>
             <h2 className={`font-pixel text-2xl md:text-3xl leading-snug mb-6 ${isDarkMode ? 'text-zinc-100' : 'text-zinc-900'}`}>
-              THE OPEN SOURCE <br/>
+              THE SYSTEMS <br/>
               <span className={isDarkMode ? 'text-green-400' : 'text-red-700'}>VIRTUOSO</span>
             </h2>
             <div className={`font-mono text-sm leading-relaxed mb-8 text-justify border-l-4 pl-4 ${
@@ -66,10 +67,12 @@ export default function Hero() {
                   ? 'border-zinc-100 bg-zinc-800 shadow-[8px_8px_0px_0px_#fff] group-hover:shadow-[4px_4px_0px_0px_#22c55e]'
                   : 'border-zinc-900 bg-white shadow-[8px_8px_0px_0px_#1a1a1a] group-hover:shadow-[4px_4px_0px_0px_#c92a2a]'
               }`}>
-                <img 
-                  src="https://placehold.co/500x500/1a1a1a/fff?text=SHUBHAM&font=press-start-2p" 
+                <Image
+                  src="/pp.jpg" 
+                  width={500}
+                  height={500}
                   alt="Shubham Raj Profile" 
-                  className={`w-full h-auto pixelated ${isDarkMode ? 'filter invert hue-rotate-180' : 'filter grayscale contrast-125'}`}
+                  className={`w-full h-auto pixelated ${isDarkMode ? 'filter  hue-rotate-90' : 'filter grayscale contrast-125'}`}
                   style={{ imageRendering: 'pixelated' }} 
                 />
               </div>
