@@ -1,6 +1,6 @@
 ---
 title: "Order and Causality in Distributed Systems"
-date: "2025-01-15"
+date: "2025-12-13"
 description: "Exploring the concepts of ordering, causality, and logical clocks in distributed systems. Understanding the 'happened before' relation and how Lamport timestamps solve ordering challenges in asynchronous environments."
 tags: ["Distributed Systems", "Systems Programming", "Algorithms", "Computer Science"]
 author: "Shubham Raj"
