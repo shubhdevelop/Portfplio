@@ -30,16 +30,34 @@ export function getBlogPostSlugs(): string[] {
 export function getBlogPostBySlug(slug: string): BlogPost | null {
   try {
     // Decode URL-encoded slug to get the actual filename
-    const decodedSlug = decodeURIComponent(slug);
-    const fullPath = path.join(postsDirectory, `${decodedSlug}.md`);
+    let decodedSlug = decodeURIComponent(slug);
+    
+    // Try to find the file - first with the decoded slug, then try variations
+    let fullPath = path.join(postsDirectory, `${decodedSlug}.md`);
+    
     if (!fs.existsSync(fullPath)) {
-      return null;
+      // Try with spaces replaced by hyphens (for backwards compatibility)
+      const hyphenatedSlug = decodedSlug.replace(/\s+/g, '-');
+      fullPath = path.join(postsDirectory, `${hyphenatedSlug}.md`);
+      
+      if (!fs.existsSync(fullPath)) {
+        // Try original slug without decoding
+        fullPath = path.join(postsDirectory, `${slug}.md`);
+        
+        if (!fs.existsSync(fullPath)) {
+          return null;
+        }
+        decodedSlug = slug;
+      } else {
+        decodedSlug = hyphenatedSlug;
+      }
     }
+    
     const fileContents = fs.readFileSync(fullPath, 'utf8');
     const { data, content } = matter(fileContents);
 
     return {
-      slug,
+      slug: decodedSlug, // Store the actual filename as slug
       title: data.title || '',
       date: data.date || '',
       description: data.description || '',

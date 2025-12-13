@@ -1,20 +1,29 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getBlogPostBySlug, getAllBlogPosts } from '@/lib/blog';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import { useTheme } from '@/hooks/theme';
 import BlogPostClient from './BlogPostClient';
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
 }
 
+// Enable dynamic rendering for this route
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
-  const posts = getAllBlogPosts();
-  return posts.map((post) => ({
-    slug: encodeURIComponent(post.slug),
-  }));
+  try {
+    const posts = getAllBlogPosts();
+    return posts.map((post) => {
+      // Encode the slug for URL, but handle spaces and special characters
+      const encodedSlug = encodeURIComponent(post.slug);
+      return {
+        slug: encodedSlug,
+      };
+    });
+  } catch (error) {
+    console.error('Error generating static params:', error);
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
@@ -50,7 +59,10 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
-  const post = getBlogPostBySlug(slug);
+  
+  // Decode the slug from URL
+  const decodedSlug = decodeURIComponent(slug);
+  const post = getBlogPostBySlug(decodedSlug);
 
   if (!post) {
     notFound();
