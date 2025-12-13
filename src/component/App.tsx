@@ -1,8 +1,7 @@
 "use client";
 
-import { ThemeContext } from "@/hooks/theme";
+import { useTheme } from "@/hooks/theme";
 import Sidebar from "./Sidebar";
-import { useState } from "react";
 import FeaturedWorks from "./FeaturedWorks";
 import Blogs from "./Blogs";
 import Footer from "./Footer";
@@ -13,12 +12,9 @@ import MetaBar from "./Metabar";
 import TextureOverlay from "./TextureOverlay";
 
 export default function App() {
-    const [isDarkMode, setIsDarkMode] = useState(false);
-  
-    const toggleTheme = () => setIsDarkMode(!isDarkMode);
+    const { isDarkMode } = useTheme();
   
     return (
-      <ThemeContext.Provider value={{ isDarkMode, toggleTheme }}>
         <div className={`antialiased p-0 md:p-8 min-h-screen font-sans transition-colors duration-300 ${
           isDarkMode 
             ? 'bg-[#111] text-zinc-100 selection:bg-green-400 selection:text-zinc-900' 
@@ -58,6 +54,5 @@ export default function App() {
             <Footer />
           </div>
         </div>
-      </ThemeContext.Provider>
     );
   }

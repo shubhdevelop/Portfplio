@@ -171,7 +171,7 @@ export default function Sidebar() {
                 Designed and shipped features for server profiles, feature flags, and superuser privileges. Wrote design documentation, reviewed PRs, and set up Storybook for component development and testing.
               </p>
             </div>
-
+  
             {/* Job 4 - DiceDB */}
             <div className="relative group">
               <div className={`absolute -left-[35px] top-1 w-6 h-6 border-4 transition-colors ${

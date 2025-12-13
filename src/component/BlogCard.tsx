@@ -1,6 +1,7 @@
 import { useTheme } from "@/hooks/theme";
 import { Blog } from "@/types/types";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 export default function BlogCard({ blog, isFirst, isLastRow }: { blog: Blog, isFirst: boolean, isLastRow: boolean }) {
     const { isDarkMode } = useTheme();
@@ -50,16 +51,27 @@ export default function BlogCard({ blog, isFirst, isLastRow }: { blog: Blog, isF
               </span>
             ))}
           </div>
-          <a 
-            href={blog.readLink || '#'} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className={`inline-flex items-center font-bold text-xs decoration-2 underline-offset-4 font-pixel group-hover:translate-x-2 transition-transform ${
-              isDarkMode ? 'hover:text-green-400' : 'hover:text-red-700'
-            }`}
-          >
-            Read More <ArrowRight className="w-4 h-4 ml-2" />
-          </a>
+          {blog.readLink && blog.readLink.startsWith('/') ? (
+            <Link 
+              href={blog.readLink}
+              className={`inline-flex items-center font-bold text-xs decoration-2 underline-offset-4 font-pixel group-hover:translate-x-2 transition-transform ${
+                isDarkMode ? 'hover:text-green-400' : 'hover:text-red-700'
+              }`}
+            >
+              Read More <ArrowRight className="w-4 h-4 ml-2" />
+            </Link>
+          ) : (
+            <a 
+              href={blog.readLink || '#'} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className={`inline-flex items-center font-bold text-xs decoration-2 underline-offset-4 font-pixel group-hover:translate-x-2 transition-transform ${
+                isDarkMode ? 'hover:text-green-400' : 'hover:text-red-700'
+              }`}
+            >
+              Read More <ArrowRight className="w-4 h-4 ml-2" />
+            </a>
+          )}
         </div>
       </div>
     );

@@ -20,5 +20,6 @@ export interface Blog {
     tags: string[];
     date?: string;
     readLink?: string;
+    slug?: string;
   }
 

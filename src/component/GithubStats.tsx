@@ -32,20 +32,20 @@ export default function GitHubStats() {
           }`}>
             <div className="flex flex-col md:block gap-4">
               <div className="flex justify-end md:justify-start">
-                <img 
-                  src={`https://ghchart.rshah.org/${chartColor}/shubhdevelop`} 
-                  alt="Shubham's GitHub Contribution Graph" 
+            <img 
+              src={`https://ghchart.rshah.org/${chartColor}/shubhdevelop`} 
+              alt="Shubham's GitHub Contribution Graph" 
                   className={`h-auto min-w-[600px] md:w-full ${isDarkMode ? 'filter hue-rotate-360 contrast-100' : 'filter contrast-125'}`}
-                  style={{ imageRendering: 'pixelated' }}
-                />
+              style={{ imageRendering: 'pixelated' }}
+            />
               </div>
               <div className="flex justify-end md:justify-start">
-                <img 
-                  src={`https://ghchart.rshah.org/${chartColor}/shubham-complyance`} 
-                  alt="Shubham's GitHub Contribution Graph" 
+             <img 
+              src={`https://ghchart.rshah.org/${chartColor}/shubham-complyance`} 
+              alt="Shubham's GitHub Contribution Graph" 
                   className={`h-auto min-w-[600px] md:w-full ${isDarkMode ? 'filter hue-rotate-360 contrast-100' : 'filter contrast-125'}`}
-                  style={{ imageRendering: 'pixelated' }}
-                />
+              style={{ imageRendering: 'pixelated' }}
+            />
               </div>
             </div>
           </div>
