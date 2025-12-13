@@ -75,26 +75,15 @@ export default function GitHubStats() {
               </span>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className={`border-2 p-1 transition-all hover:translate-x-1 hover:translate-y-1 ${
+            <div className="flex justify-center flex-row items-center">
+              <div className={`border-2 p-1 col-span-1 transition-all hover:translate-x-1 hover:translate-y-1 ${
                 isDarkMode 
                   ? 'bg-zinc-900 border-zinc-100 shadow-[8px_8px_0px_0px_#fff] hover:shadow-[4px_4px_0px_0px_#fff]' 
                   : 'bg-white border-zinc-900 shadow-[8px_8px_0px_0px_#1a1a1a] hover:shadow-[4px_4px_0px_0px_#1a1a1a]'
               }`}>
                 <img 
-                  src={`https://github-readme-stats.vercel.app/api?username=shubhdevelop&show_icons=true&hide_border=true&hide_rank=true${statsThemeQuery}`} 
+                  src={`https://github-readme-stats.vercel.app/api?username=shubhdevelop&show_icons=true&hide_border=true&hide_rank=true`} 
                   alt="GitHub Stats" 
-                  className="w-full"
-                />
-              </div>
-              <div className={`border-2 p-1 transition-all hover:translate-x-1 hover:translate-y-1 ${
-                isDarkMode 
-                  ? 'bg-zinc-900 border-zinc-100 shadow-[8px_8px_0px_0px_#fff] hover:shadow-[4px_4px_0px_0px_#fff]' 
-                  : 'bg-white border-zinc-900 shadow-[8px_8px_0px_0px_#1a1a1a] hover:shadow-[4px_4px_0px_0px_#1a1a1a]'
-              }`}>
-                <img 
-                  src={`https://github-readme-stats.vercel.app/api/top-langs/?username=shubhdevelop&layout=compact&hide_border=true${statsThemeQuery}`} 
-                  alt="Top Languages" 
                   className="w-full"
                 />
               </div>
