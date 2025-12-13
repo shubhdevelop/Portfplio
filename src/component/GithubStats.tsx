@@ -87,6 +87,17 @@ export default function GitHubStats() {
                   className="w-full"
                 />
               </div>
+              <div className={`border-2 p-1 transition-all hover:translate-x-1 hover:translate-y-1 ${
+                isDarkMode 
+                  ? 'bg-zinc-900 border-zinc-100 shadow-[8px_8px_0px_0px_#fff] hover:shadow-[4px_4px_0px_0px_#fff]' 
+                  : 'bg-white border-zinc-900 shadow-[8px_8px_0px_0px_#1a1a1a] hover:shadow-[4px_4px_0px_0px_#1a1a1a]'
+              }`}>
+                <img 
+                  src={`https://github-readme-stats.vercel.app/api/top-langs/?username=shubhdevelop&layout=compact&hide_border=true${statsThemeQuery}`} 
+                  alt="Top Languages" 
+                  className="w-full"
+                />
+              </div>
             </div>
             <div className="text-center mt-6">
               <a href="https://github.com/shubhdevelop" target="_blank" rel="noopener noreferrer" className={`font-pixel text-[8px] uppercase tracking-widest hover:text-red-700 ${isDarkMode ? 'text-zinc-400' : 'text-zinc-500'}`}>
