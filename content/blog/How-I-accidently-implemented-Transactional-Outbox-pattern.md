@@ -21,7 +21,7 @@ Each route checks for a `balanceKey` in the cache. If it’s a cache miss:
 
 1. The API call takes a **distributed lock** on the `userId`.
 2. It fetches the `currentBalance` from the DB.
-3. Concurrent requests wait and retry until the lock is released and the cache is rehydrated.
+3. Concurrent requests for that `userid` wait and retry until the lock is released and the cache is rehydrated.
 
 Taking a lock here is essential. You don’t want 1,000 concurrent cache misses for a userId hitting your DB at once. This prevents the **Thundering Herd** problem. Once rehydrated, the other 999 users pull directly from Redis/Valkey.
 ### 2. The Logic: Adding vs. Deducting
@@ -59,9 +59,9 @@ The solution is two-fold:
 
 Valkey recently introduced **Valkey Functions** ( Lua scripts ), hence I used it. Valkey guarantees that all operations inside a script happen atomically. Either the balance is deducted and the event is queued, or nothing happens.
 
-Benefits of valkey functions are that, we save on network bandwidth, and acts as stored proccedure 
+Benefits of valkey functions are that, we save on network bandwidth, and it also acts as stored proccedures.
 
-#### The "Mastery" Lua Script:
+#### The Lua Script:
 
 Lua script
 
@@ -180,12 +180,12 @@ func AddCredits(ctx context.Context, client *glide.Client, balKey, idempotencyKe
 ### Conclusion
 
 
-if you didn't figure out yet, you just like me and we just unknowingly implemented the transactional outbox pattern together.
+If you didn't figure out yet, you just like me and we just unknowingly implemented the transactional outbox pattern together.
 
-Traditionally outbox pattern happens inside db, whenever we take any business action and save a record in db, we also write to a dedicated outbox table or collection, about the event, and ensured both happens or none that too in an atomic transaction.
+Traditionally outbox pattern happens on db, whenever we take any business action and save a record in db, we also write to a dedicated outbox table or collection about the event, and ensure both happens or none with transactions.
 
 Other services tails this table/collection and publishes them to a message broker like kafka, sqs or redis stream.  
 
-we skipped the relay part of it, as we could publish the event and save the record in a transaction the message broker in a atomic manner,with the help of valkey functions. Now any other services can consume the events, and act accordingly 
+we skipped the relay part of it, as we could publish the event and save the record in a transaction the message broker in a atomic manner, with the help of valkey functions and it's guarentees. Now any other services can consume the events, and act accordingly 
 
 Without realizing it, we just implemented the **Transactional Outbox Pattern** together.
