@@ -54,7 +54,9 @@ export function getBlogPostBySlug(slug: string): BlogPost | null {
     }
     
     const fileContents = fs.readFileSync(fullPath, 'utf8');
-    const { data, content } = matter(fileContents);
+    // Normalize leading whitespace so frontmatter is correctly detected
+    const normalizedContents = fileContents.replace(/^\s+---/, '---');
+    const { data, content } = matter(normalizedContents);
 
     return {
       slug: decodedSlug, // Store the actual filename as slug
