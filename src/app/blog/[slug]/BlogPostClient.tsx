@@ -36,11 +36,19 @@ export default function BlogPostClient({ post }: BlogPostClientProps) {
   const { isDarkMode } = useTheme();
 
   return (
-    <div className={`min-h-screen transition-colors ${
-      isDarkMode 
-        ? 'bg-[#111] text-zinc-100' 
-        : 'bg-[#eae8dc] text-zinc-900'
-    }`}>
+    <div
+      className={`relative isolate min-h-screen overflow-hidden transition-colors ${
+        isDarkMode
+          ? 'bg-[#111] text-zinc-100'
+          : 'bg-[#eae8dc] text-zinc-900'
+      }`}
+      style={{
+        backgroundImage: isDarkMode
+          ? 'radial-gradient(ellipse 72% 100% at 50% 50%, rgba(39, 39, 42, 0.72) 0%, rgba(39, 39, 42, 0.4) 52%, transparent 100%), radial-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px)'
+          : 'radial-gradient(ellipse 72% 100% at 50% 50%, rgba(253, 251, 247, 0.92) 0%, rgba(253, 251, 247, 0.5) 52%, transparent 100%), radial-gradient(rgba(24, 24, 27, 0.08) 1px, transparent 1px)',
+        backgroundSize: '100% 100%, 24px 24px',
+      }}
+    >
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
         .font-pixel { font-family: 'Press Start 2P', cursive; }
@@ -95,9 +103,7 @@ export default function BlogPostClient({ post }: BlogPostClientProps) {
         `}
       `}</style>
 
-      <div className={`max-w-4xl mx-auto px-4 md:px-8 py-8 md:py-16 ${
-        isDarkMode ? 'bg-zinc-900' : 'bg-[#fdfbf7]'
-      }`}>
+      <div className="mx-auto max-w-4xl px-6 py-10 sm:px-10 md:px-16 md:py-20">
         {/* Back Button and Theme Toggle */}
         <div className="flex justify-between items-center mb-8">
           <Link 
