@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" role="img" aria-labelledby="title desc">
+  <title id="title">Memory block copied into a cache line</title><desc id="desc">A 64-byte block in main memory transfers to a 64-byte cache line.</desc>
+  <defs><marker id="arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="currentColor"/></marker></defs>
+  <g font-family="system-ui, sans-serif" fill="currentColor" text-anchor="middle"><text x="400" y="34" font-size="24" font-weight="700">A block is copied from memory into one cache line</text><text x="400" y="76" font-size="20" font-weight="700">Main memory: one 64-byte block</text></g>
+  <g fill="currentColor" fill-opacity=".08" stroke="currentColor" stroke-width="1.25"><rect x="80" y="94" width="640" height="38" rx="4"/>
+    <path d="M120 94V132M160 94V132M200 94V132M240 94V132M280 94V132M320 94V132M360 94V132M400 94V132M440 94V132M480 94V132M520 94V132M560 94V132M600 94V132M640 94V132M680 94V132"/>
+    <rect x="80" y="254" width="640" height="38" rx="4"/>
+    <path d="M120 254V292M160 254V292M200 254V292M240 254V292M280 254V292M320 254V292M360 254V292M400 254V292M440 254V292M480 254V292M520 254V292M560 254V292M600 254V292M640 254V292M680 254V292"/></g>
+  <path d="M400 150V218" stroke="currentColor" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <g font-family="system-ui, sans-serif" fill="currentColor" text-anchor="middle"><text x="458" y="182" font-size="18">transfer</text><text x="400" y="238" font-size="20" font-weight="700">Cache: one cache line</text><text x="400" y="332" font-size="18">64 bytes in both cases</text></g>
+</svg>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="title desc">
+  <title id="title">Memory hierarchy and locality</title>
+  <desc id="desc">A memory hierarchy from registers to storage, with temporal and spatial locality explanations.</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="currentColor"/></marker></defs>
+  <g fill="none" stroke="currentColor" stroke-width="1.25">
+    <path d="M130 35L245 315H15Z" fill="currentColor" fill-opacity=".05"/>
+    <path d="M106 35L154 35L177 91H83Z"/><path d="M83 91H177L199 145H61Z"/><path d="M61 145H199L222 200H38Z"/><path d="M38 200H222L245 257H15Z"/><path d="M15 257H245L268 315H-8Z"/>
+    <line x1="292" y1="95" x2="292" y2="256" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+    <rect x="365" y="48" width="390" height="250" rx="14" fill="currentColor" fill-opacity=".05"/>
+    <line x1="365" y1="164" x2="755" y2="164"/>
+  </g>
+  <g font-family="system-ui, sans-serif" fill="currentColor" text-anchor="middle">
+    <text x="130" y="71" font-size="20" font-weight="700">CPU Registers</text><text x="130" y="126" font-size="20" font-weight="700">L1 Cache</text><text x="130" y="181" font-size="20" font-weight="700">L2 Cache</text><text x="130" y="236" font-size="20" font-weight="700">L3 Cache</text><text x="130" y="293" font-size="20" font-weight="700">DRAM</text><text x="130" y="350" font-size="20" font-weight="700">Storage</text>
+    <text x="292" y="70" font-size="18" font-weight="700">Faster</text><text x="292" y="91" font-size="18">smaller</text><text x="292" y="285" font-size="18" font-weight="700">Slower</text><text x="292" y="306" font-size="18">larger</text>
+  </g>
+  <g font-family="system-ui, sans-serif" fill="currentColor"><text x="390" y="88" font-size="24" font-weight="700">Locality makes caching work</text><text x="390" y="124" font-size="20" font-weight="700">Temporal locality</text><text x="390" y="148" font-size="18">Recently accessed data is likely to be used again.</text><text x="390" y="205" font-size="20" font-weight="700">Spatial locality</text><text x="390" y="229" font-size="18">Nearby addresses are likely to be used soon.</text></g>
+</svg>

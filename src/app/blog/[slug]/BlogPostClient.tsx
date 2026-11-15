@@ -191,6 +191,35 @@ export default function BlogPostClient({ post }: BlogPostClientProps) {
               p: ({ node, ...props }) => (
                 <p className={`font-sans text-base leading-relaxed mb-4 ${isDarkMode ? 'text-zinc-300' : 'text-zinc-700'}`} {...props} />
               ),
+              img: ({ node, ...props }) => (
+                <img
+                  {...props}
+                  className={`my-6 h-auto w-full ${isDarkMode ? 'invert' : ''}`}
+                  loading="lazy"
+                />
+              ),
+              table: ({ node, ...props }) => (
+                <div className={`my-6 overflow-x-auto border-2 ${
+                  isDarkMode ? 'border-zinc-100' : 'border-zinc-900'
+                }`}>
+                  <table className="min-w-full border-collapse font-mono text-sm" {...props} />
+                </div>
+              ),
+              thead: ({ node, ...props }) => (
+                <thead className={isDarkMode ? 'bg-zinc-800 text-zinc-100' : 'bg-zinc-200 text-zinc-900'} {...props} />
+              ),
+              tbody: ({ node, ...props }) => (
+                <tbody {...props} />
+              ),
+              tr: ({ node, ...props }) => (
+                <tr className={`border-t ${isDarkMode ? 'border-zinc-700' : 'border-zinc-300'}`} {...props} />
+              ),
+              th: ({ node, ...props }) => (
+                <th className="whitespace-nowrap px-4 py-3 text-left font-medium" {...props} />
+              ),
+              td: ({ node, ...props }) => (
+                <td className={`whitespace-nowrap px-4 py-3 ${isDarkMode ? 'text-zinc-300' : 'text-zinc-700'}`} {...props} />
+              ),
               code: ({ node, className, ...props }: any) => {
                 const isInline = !className;
                 return isInline ? (
