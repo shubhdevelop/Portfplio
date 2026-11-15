@@ -49,7 +49,10 @@ int *a = &b;
 
 Going forward, we will assume the block size to be 64 bytes to keep the upcoming examples simple and consistent.
 
-![A 64-byte block in main memory copied into a 64-byte cache line](/blog/cpu-cache-diagrams/cache-line-block.svg)
+| Term | Meaning |
+| --- | --- |
+| Memory block | An aligned, fixed-size region of main memory, such as bytes 0–63. |
+| Cache line | A cache storage location that holds a copy of one memory block and its metadata. |
 
 ##### Logically divided memory
 
@@ -69,8 +72,6 @@ $$
 $$
 \text{offset within block} = A \bmod 64
 $$
-
-![Four logical 64-byte memory blocks and formulas for block number and byte offset](/blog/cpu-cache-diagrams/logical-memory.svg)
 
 Though data is loaded in blocks, the CPU can update individual bytes of an existing cache line (cache slot). Processors can have 64-byte cache lines and smaller internal access widths.
 
@@ -202,8 +203,6 @@ All four blocks are even, so they belong to set 0. They can coexist because that
 Now, if a request for block 32 comes in, it will map to set 0. Something in set 0 must be evicted, even though half of the cache is empty.
 
 **An address selects one set. Associativity determines how many slots are available within that set.**
-
-![Associativity options and a two-set, four-way cache](/blog/cpu-cache-diagrams/set-associative-cache.svg)
 
 More formulas:
 
@@ -389,8 +388,6 @@ For a conventional organisation with a 64-byte line and a 48-bit address, $s = 6
 | Set index | 6 | 11–6 |
 | Byte offset | 6 | 5–0 |
 
-![A 48-bit physical address split into tag, set-index, and byte-offset fields](/blog/cpu-cache-diagrams/address-breakdown.svg)
-
 For:
 
 ```
@@ -426,3 +423,7 @@ Notice that the address does not tell us which `way` holds the requested block. 
 Moreover, the tag alone does not determine the block globally. The tag + set index identifies the block, and adding the offset identifies the byte.
 
 With this, we have established the fundamental mechanism behind cache mapping and address decomposition.
+
+## Next topic
+
+[**Cache lookup and replacement**](/blog/cache-lookup-and-replacement) covers tag comparison, valid bits, parallel comparison, cache hits and misses, plus LRU, pseudo-LRU, random replacement, and eviction.
