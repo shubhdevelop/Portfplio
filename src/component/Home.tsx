@@ -95,7 +95,7 @@ const EDUCATION = [
 ];
 
 const SKILLS = [
-  { label: 'Languages', items: 'TypeScript, Go, C, Python, JavaScript' },
+  { label: 'Languages', items: 'TypeScript, Go, C, JavaScript' },
   { label: 'Backend', items: 'Node, Bun, Next.js, React, MongoDB, Redis, PostgreSQL' },
   { label: 'Infra', items: 'AWS (EKS, VPC, IAM, KMS, S3, SQS, WAF), Terraform, Kubernetes, Argo CD, Helm, Karpenter, KEDA, GitHub Actions' },
   { label: 'Messaging & observability', items: 'SQS, RabbitMQ, OpenTelemetry, Prometheus, Grafana, Loki' },
