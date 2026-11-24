@@ -134,11 +134,7 @@ export default function CacheAddressCalculator() {
             log2(S) bits, and the tag takes the remaining high bits of the address. Each field is a shift and a mask.
           </p>
           <p className={muted}>
-            Learn the theory in{' '}
-            <Link className={link} href="/blog/cpu-cache-address-decomposition">the tag, index and offset tutorial</Link>, see{' '}
-            <Link className={link} href="/blog/cpu-cache-address-decomposition-examples">worked examples</Link>, or try the{' '}
-            <Link className={link} href="/blog/cpu-cache-address-decomposition-practice-problems">practice problems</Link>. For how
-            lines, sets and ways are organised, read{' '}
+            For how lines, sets and ways are organised, read{' '}
             <Link className={link} href="/blog/cpu-cache-mapping-and-address-decomposition">CPU cache mapping explained</Link>.
           </p>
         </section>
