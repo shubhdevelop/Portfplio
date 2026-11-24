@@ -19,7 +19,7 @@ const PROJECTS: Project[] = [
   {
     title: 'YAKVS',
     tagline: 'Yet another key-value store',
-    description: 'Redis-compatible key-value store in Go with RESP implemented from scratch, an interactive CLI, TTL handling, and AOF persistence with recovery.',
+    description: 'Redis-compatible key-value store in Go with RESP implemented from scratch (streaming parser, 100% test coverage), an interactive CLI, and AOF persistence with recovery.',
     tags: ['Go', 'RESP', 'AOF'],
     repoLink: 'https://github.com/shubhdevelop/YAKVS',
   },
@@ -29,6 +29,20 @@ const PROJECTS: Project[] = [
     description: 'SOCKS4 and SOCKS4a compliant proxy in C on Linux io_uring, with frame parsing, domain-name resolution, and both CONNECT and BIND commands.',
     tags: ['C', 'io_uring', 'Networking'],
     repoLink: 'https://github.com/shubhdevelop/Socks4',
+  },
+  {
+    title: 'Distributed Payment Ledger',
+    tagline: 'Atomic credits ledger',
+    description: 'Credits ledger in Go whose deduct and transfer run atomically in Valkey Lua scripts with 24-hour idempotency keys, a Valkey Stream drained by consumer-group workers into MongoDB, and cache-aside hydration behind a distributed lock.',
+    tags: ['Go', 'Valkey', 'MongoDB', 'Lua'],
+    repoLink: 'https://github.com/shubhdevelop/distributed_payment_ledger',
+  },
+  {
+    title: 'websockets',
+    tagline: 'RFC 6455 WebSockets from scratch',
+    description: 'WebSocket library in Go: HTTP upgrade handshake, frame parsing and composing (extended lengths, masking), message fragmentation, and ping, pong and close control frames with protocol validation.',
+    tags: ['Go', 'WebSocket', 'Networking'],
+    repoLink: 'https://github.com/shubhdevelop/websockets',
   },
   {
     title: 'YAPL',
@@ -59,6 +73,7 @@ const EXPERIENCE = [
       'Built a multi-tenant Peppol SMP control plane in Go with idempotency keys, rate limits and drift reconciliation.',
       'Built the submission service (per-country SQS queues for 7 countries, Redis NX idempotency locks) and shipped Greece e-invoicing; integrated LHDN and ZATCA.',
       'Built a shared SQS consumer and OpenTelemetry tracing across 17+ services.',
+      'Engineered A3-compliant PDF and XLSX report generation with Puppeteer, now producing 3000+ PDFs per day.',
     ],
   },
   {
