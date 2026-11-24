@@ -23,15 +23,6 @@ export default function App() {
           backgroundImage: `radial-gradient(${isDarkMode ? '#333' : '#a1a1aa'} 1px, transparent 1px)`,
           backgroundSize: '20px 20px'
         }}>
-          <style>{`
-            @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
-          `}</style>
-          
-          <style>{`
-            .font-pixel { font-family: 'Press Start 2P', cursive; }
-            .font-mono { font-family: 'JetBrains Mono', monospace; }
-            .pixelated { image-rendering: pixelated; }
-          `}</style>
   
           <TextureOverlay />
   

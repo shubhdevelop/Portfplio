@@ -427,3 +427,10 @@ With this, we have established the fundamental mechanism behind cache mapping an
 ## Next topic
 
 [**Cache lookup and replacement**](/blog/cache-lookup-and-replacement) covers tag comparison, valid bits, parallel comparison, cache hits and misses, plus LRU, pseudo-LRU, random replacement, and eviction.
+
+## Related articles
+
+- [CPU cache address decomposition: tag, index and offset explained](/blog/cpu-cache-address-decomposition): the short reference with formulas and a step-by-step procedure.
+- [Cache address decomposition examples](/blog/cpu-cache-address-decomposition-examples): seven worked configurations.
+- [Cache address decomposition practice problems](/blog/cpu-cache-address-decomposition-practice-problems): exercises with answers.
+- [Cache tag, index and offset calculator](/tools/cache-address-calculator): check your own geometry and address.

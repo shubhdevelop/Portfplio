@@ -24,3 +24,15 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.font-pixel {
+  font-family: var(--font-pixel), cursive;
+}
+
+.font-mono {
+  font-family: var(--font-jetbrains), monospace;
+}
+
+.pixelated {
+  image-rendering: pixelated;
+}

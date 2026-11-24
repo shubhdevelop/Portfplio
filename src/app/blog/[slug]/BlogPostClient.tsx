@@ -50,9 +50,6 @@ export default function BlogPostClient({ post }: BlogPostClientProps) {
       }}
     >
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
-        .font-pixel { font-family: 'Press Start 2P', cursive; }
-        .font-mono { font-family: 'JetBrains Mono', monospace; }
         
         /* KaTeX block math styling */
         .katex-display {
@@ -121,6 +118,16 @@ export default function BlogPostClient({ post }: BlogPostClientProps) {
           <ThemeToggle />
         </div>
 
+        <nav aria-label="Breadcrumb" className={`mb-6 font-mono text-xs ${isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>
+          <ol className="flex flex-wrap items-center gap-2">
+            <li><Link href="/" className="underline underline-offset-2">Home</Link></li>
+            <li aria-hidden="true">/</li>
+            <li><Link href="/blog" className="underline underline-offset-2">Blog</Link></li>
+            <li aria-hidden="true">/</li>
+            <li aria-current="page" className="truncate max-w-[60vw]">{post.title}</li>
+          </ol>
+        </nav>
+
         {/* Header */}
         <header className={`mb-8 pb-8 border-b-2 ${
           isDarkMode ? 'border-zinc-100' : 'border-zinc-900'
@@ -132,13 +139,13 @@ export default function BlogPostClient({ post }: BlogPostClientProps) {
           </h1>
           
           <div className="flex flex-wrap items-center gap-4 font-mono text-xs">
-            <span className={isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}>
+            <time dateTime={post.date} className={isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}>
               {new Date(post.date).toLocaleDateString('en-US', { 
                 year: 'numeric', 
                 month: 'long', 
                 day: 'numeric' 
               })}
-            </span>
+            </time>
             {post.readTime && (
               <span className={isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}>
                 • {post.readTime}
@@ -245,18 +252,25 @@ export default function BlogPostClient({ post }: BlogPostClientProps) {
                   {...props}
                 />
               ),
-              a: ({ node, ...props }) => (
-                <a
-                  className={`underline decoration-2 underline-offset-2 ${
-                    isDarkMode
-                      ? 'text-green-400 hover:text-green-300'
-                      : 'text-red-700 hover:text-red-600'
-                  }`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  {...props}
-                />
-              ),
+              a: ({ node, href, ...props }) => {
+                const linkClass = `underline decoration-2 underline-offset-2 ${
+                  isDarkMode
+                    ? 'text-green-400 hover:text-green-300'
+                    : 'text-red-700 hover:text-red-600'
+                }`;
+                if (href?.startsWith('/')) {
+                  return <Link href={href} className={linkClass}>{props.children}</Link>;
+                }
+                return (
+                  <a
+                    href={href}
+                    className={linkClass}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    {...props}
+                  />
+                );
+              },
               ul: ({ node, ...props }) => (
                 <ul className={`list-disc list-outside mb-4 ml-6 space-y-2 ${isDarkMode ? 'text-zinc-300' : 'text-zinc-700'}`} {...props} />
               ),

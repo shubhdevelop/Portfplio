@@ -13,6 +13,7 @@ export interface BlogPost {
   content: string;
   author?: string;
   readTime?: string;
+  noindex?: boolean;
 }
 
 export function getBlogPostSlugs(): string[] {
@@ -67,6 +68,7 @@ export function getBlogPostBySlug(slug: string): BlogPost | null {
       content,
       author: data.author || 'Shubham Raj',
       readTime: data.readTime || calculateReadTime(content),
+      noindex: data.noindex === true,
     };
   } catch (error) {
     console.error(`Error reading blog post ${slug}:`, error);
