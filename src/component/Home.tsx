@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect, useRef } from 'react';
 import SiteNav from '@/component/SiteNav';
 import { useTheme } from '@/hooks/theme';
 import type { Blog, Project } from '@/types/types';
@@ -80,10 +81,35 @@ const EDUCATION = [
 
 const SKILLS = ['JavaScript', 'TypeScript', 'Go', 'C', 'React', 'Next.js', 'Node.js', 'MongoDB'];
 
+const GITHUB_ACCOUNTS = ['shubhdevelop', 'shubham-complyance'];
+
+// Scrolls to the newest weeks first when the chart is wider than the screen.
+function HeatMap({ user, color, dark }: { user: string; color: string; dark: boolean }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (el) el.scrollLeft = el.scrollWidth;
+  }, []);
+  return (
+    <div ref={ref} className="overflow-x-auto">
+      {/* biome-ignore lint/performance/noImgElement: external SVG chart */}
+      <img
+        src={`https://ghchart.rshah.org/${color}/${user}`}
+        alt={`GitHub contribution graph for ${user}`}
+        width={663}
+        height={104}
+        loading="lazy"
+        className={`h-auto w-[663px] max-w-none md:w-full ${dark ? 'brightness-75' : ''}`}
+      />
+    </div>
+  );
+}
+
 const SECTIONS = [
   { id: 'about', label: 'About' },
   { id: 'projects', label: 'Projects' },
   { id: 'writing', label: 'Writing' },
+  { id: 'activity', label: 'Activity' },
   { id: 'experience', label: 'Experience' },
   { id: 'education', label: 'Education' },
 ];
@@ -202,6 +228,28 @@ export default function Home({ posts }: { posts: Blog[] }) {
           <Link href="/blog" className={`mt-2 inline-block font-mono text-xs ${muted} ${link}`}>
             All posts →
           </Link>
+        </section>
+
+        <section id="activity" className="mb-12">
+          <h2 className={h2}>Activity</h2>
+          <div className="space-y-5">
+            {GITHUB_ACCOUNTS.map((user) => (
+              <figure key={user}>
+                <figcaption className={`mb-1 font-mono text-xs ${muted}`}>
+                  <a
+                    className={link}
+                    href={`https://github.com/${user}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    @{user}
+                  </a>{' '}
+                  · contributions, last year
+                </figcaption>
+                <HeatMap user={user} color={dark ? '4ade80' : '196127'} dark={dark} />
+              </figure>
+            ))}
+          </div>
         </section>
 
         <section id="experience" className="mb-12">
