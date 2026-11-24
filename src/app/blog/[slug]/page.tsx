@@ -1,7 +1,9 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getBlogPostBySlug, getAllBlogPosts } from '@/lib/blog';
-import BlogPostClient from './BlogPostClient';
+import { SITE_NAME, absoluteUrl, blogPath } from '@/lib/site';
+import { extractHeadings } from '@/lib/headings';
+import BlogPostClient, { type PostLink } from './BlogPostClient';
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -39,11 +41,14 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   return {
     title: `${post.title} | Shubham Raj`,
     description: post.description,
-    authors: [{ name: post.author || 'Shubham Raj' }],
+    authors: [{ name: post.author || SITE_NAME }],
     keywords: post.tags,
+    alternates: { canonical: blogPath(post.slug) },
+    robots: post.noindex ? { index: false, follow: true } : undefined,
     openGraph: {
       title: post.title,
       description: post.description,
+      url: blogPath(post.slug),
       type: 'article',
       publishedTime: post.date,
       authors: [post.author || 'Shubham Raj'],
@@ -68,6 +73,49 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     notFound();
   }
 
-  return <BlogPostClient post={post} />;
+  const all = getAllBlogPosts();
+  const i = all.findIndex((p) => p.slug === post.slug);
+  const toLink = (p?: (typeof all)[number]): PostLink | null =>
+    p ? { slug: p.slug, title: p.title, href: blogPath(p.slug) } : null;
+  const newer = toLink(i > 0 ? all[i - 1] : undefined);
+  const older = toLink(i >= 0 ? all[i + 1] : undefined);
+
+  const url = absoluteUrl(blogPath(post.slug));
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BlogPosting',
+        '@id': `${url}#article`,
+        mainEntityOfPage: url,
+        headline: post.title,
+        description: post.description,
+        datePublished: post.date,
+        dateModified: post.date,
+        author: { '@type': 'Person', name: post.author || SITE_NAME, url: absoluteUrl('/') },
+        keywords: post.tags.join(', '),
+        inLanguage: 'en',
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: absoluteUrl('/') },
+          { '@type': 'ListItem', position: 2, name: 'Blog', item: absoluteUrl('/blog') },
+          { '@type': 'ListItem', position: 3, name: post.title, item: url },
+        ],
+      },
+    ],
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        // Escape "<" so post text cannot terminate the script element.
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
+      />
+      <BlogPostClient post={post} headings={extractHeadings(post.content)} newer={newer} older={older} />
+    </>
+  );
 }
 

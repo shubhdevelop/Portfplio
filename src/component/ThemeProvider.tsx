@@ -10,15 +10,8 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
   useEffect(() => {
     // Check localStorage for saved theme preference
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      setIsDarkMode(true);
-    } else if (savedTheme === 'light') {
-      setIsDarkMode(false);
-    } else {
-      // Default to system preference
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setIsDarkMode(prefersDark);
-    }
+    // Off-white light theme is the default; dark only when the user chose it.
+    setIsDarkMode(savedTheme === 'dark');
     setMounted(true);
   }, []);
 
@@ -26,6 +19,7 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
     // Save theme preference to localStorage
     if (mounted) {
       localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+      document.documentElement.dataset.theme = isDarkMode ? 'dark' : 'light';
     }
   }, [isDarkMode, mounted]);
 
