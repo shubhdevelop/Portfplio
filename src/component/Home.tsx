@@ -19,9 +19,16 @@ const PROJECTS: Project[] = [
   {
     title: 'YAKVS',
     tagline: 'Yet another key-value store',
-    description: 'A key-value store in Go exploring database fundamentals and efficient data structures.',
-    tags: ['Go', 'Database', 'Systems'],
+    description: 'Redis-compatible key-value store in Go with RESP implemented from scratch, an interactive CLI, TTL handling, and AOF persistence with recovery.',
+    tags: ['Go', 'RESP', 'AOF'],
     repoLink: 'https://github.com/shubhdevelop/YAKVS',
+  },
+  {
+    title: 'Socks4',
+    tagline: 'SOCKS4 / SOCKS4a proxy',
+    description: 'SOCKS4 and SOCKS4a compliant proxy in C on Linux io_uring, with frame parsing, domain-name resolution, and both CONNECT and BIND commands.',
+    tags: ['C', 'io_uring', 'Networking'],
+    repoLink: 'https://github.com/shubhdevelop/Socks4',
   },
   {
     title: 'YAPL',
@@ -42,15 +49,23 @@ const PROJECTS: Project[] = [
 const EXPERIENCE = [
   {
     org: 'Complyance',
-    role: 'Full-Stack Developer',
+    role: 'Software Engineer, Backend & Infrastructure',
     period: 'Jun 2025 - Present',
-    text: 'Leading end-to-end product development in a microservices architecture with Encore and Next.js. Built A3-compliant PDF/XLSX report generation producing 2,000+ reports daily, and configurable multi-country forms with TanStack Form for e-invoicing across Malaysia, Saudi Arabia and UAE.',
+    text: 'Owning backend and infrastructure for an e-invoicing platform.',
+    highlights: [
+      'Owned the Railway to AWS EKS production migration of a 25-workload platform: Terraform-built three-AZ private cluster, phased cutover with canaries, and a queue-isolation audit.',
+      'Built the Argo CD GitOps release pipeline: one Helm chart rendering 44 service/environment combinations, with rollback as a git revert and no cluster credentials in CI.',
+      'Built three-AZ Redis HA (Sentinel, HAProxy, TLS) and ran AWS FIS AZ-isolation drills.',
+      'Built a multi-tenant Peppol SMP control plane in Go with idempotency keys, rate limits and drift reconciliation.',
+      'Built the submission service (per-country SQS queues for 7 countries, Redis NX idempotency locks) and shipped Greece e-invoicing; integrated LHDN and ZATCA.',
+      'Built a shared SQS consumer and OpenTelemetry tracing across 17+ services.',
+    ],
   },
   {
     org: 'Complyance',
     role: 'Full-Stack Developer Intern',
     period: 'Oct 2024 - Jun 2025',
-    text: 'Contributed to Phase 2 of the Malaysia e-invoicing platform: custom data views, localized report generation and a multi-step onboarding experience.',
+    text: 'Contributed to the Phase 2 expansion of e-invoicing services in Malaysia; built custom views and report generation for localized reporting and a multi-step onboarding flow.',
   },
   {
     org: 'Real Dev Squad',
@@ -69,7 +84,7 @@ const EXPERIENCE = [
 const EDUCATION = [
   {
     org: 'Sri Guru Gobind Singh College of Commerce, Delhi University',
-    role: 'Bachelor of Commerce',
+    role: 'BCom (Honors)',
     period: 'Nov 2022 - Nov 2026',
   },
   {
@@ -79,7 +94,13 @@ const EDUCATION = [
   },
 ];
 
-const SKILLS = ['JavaScript', 'TypeScript', 'Go', 'C', 'React', 'Next.js', 'Node.js', 'MongoDB'];
+const SKILLS = [
+  { label: 'Languages', items: 'TypeScript, Go, C, Python, JavaScript' },
+  { label: 'Backend', items: 'Node, Bun, Next.js, React, MongoDB, Redis, PostgreSQL' },
+  { label: 'Infra', items: 'AWS (EKS, VPC, IAM, KMS, S3, SQS, WAF), Terraform, Kubernetes, Argo CD, Helm, Karpenter, KEDA, GitHub Actions' },
+  { label: 'Messaging & observability', items: 'SQS, RabbitMQ, OpenTelemetry, Prometheus, Grafana, Loki' },
+  { label: 'E-invoicing', items: 'Peppol, ZATCA, LHDN' },
+];
 
 const GITHUB_ACCOUNTS = ['shubhdevelop', 'shubham-complyance'];
 
@@ -140,13 +161,13 @@ export default function Home({ posts }: { posts: Blog[] }) {
           <div>
             <h1 className="mb-2 font-pixel text-xl md:text-2xl">Shubham Raj</h1>
             <p className={`mb-4 leading-relaxed ${body}`}>
-              Full-stack developer and systems programming enthusiast in Chennai, India.
+              Backend and infrastructure engineer and systems programming enthusiast in Chennai, India.
             </p>
             <ul className={`flex flex-wrap gap-x-5 gap-y-2 font-mono text-sm sm:text-xs ${muted}`}>
               <li><a className={link} href="https://github.com/shubhdevelop" target="_blank" rel="noopener noreferrer">GitHub</a></li>
               <li><a className={link} href="https://twitter.com/_Shubham2XX" target="_blank" rel="noopener noreferrer">X</a></li>
               <li><a className={link} href="https://www.linkedin.com/in/shubhamraj10" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-              <li><a className={link} href="/Shubham's Resume 2025.pdf" target="_blank" rel="noopener noreferrer">Resume</a></li>
+              <li><a className={link} href="/Shubham_Raj_Resume_2026.pdf" target="_blank" rel="noopener noreferrer">Resume</a></li>
             </ul>
           </div>
         </section>
@@ -169,8 +190,9 @@ export default function Home({ posts }: { posts: Blog[] }) {
               TypeScript pays the bills; Go and C are for fun.
             </p>
             <p>
-              At Complyance I build e-invoicing and reporting products. Outside work I write an emulator, a
-              key-value store and an interpreter from scratch, and{' '}
+              At Complyance I work on backend and infrastructure for an e-invoicing platform: AWS, Kubernetes,
+              queues and Go services. Outside work I build an emulator, a Redis-compatible key-value store, a
+              SOCKS proxy and an interpreter from scratch, and{' '}
               <Link href="/blog" className={link}>write about</Link> what I learn along the way, from CPU caches to
               network protocols.
             </p>
@@ -262,6 +284,11 @@ export default function Home({ posts }: { posts: Blog[] }) {
                   <span className={`font-mono text-xs ${muted}`}>{e.period}</span>
                 </div>
                 <p className={`mt-1 text-sm leading-relaxed ${muted}`}>{e.text}</p>
+                {e.highlights && (
+                  <ul className={`mt-2 ml-4 list-disc space-y-1 text-sm leading-relaxed ${muted}`}>
+                    {e.highlights.map((h) => <li key={h}>{h}</li>)}
+                  </ul>
+                )}
               </li>
             ))}
           </ul>
@@ -281,7 +308,14 @@ export default function Home({ posts }: { posts: Blog[] }) {
 
         <section className="mb-12">
           <h2 className={h2}>Tools</h2>
-          <p className={`font-mono text-sm ${muted}`}>{SKILLS.join(' · ')}</p>
+          <dl className="space-y-2 text-sm leading-relaxed">
+            {SKILLS.map((s) => (
+              <div key={s.label} className="sm:flex sm:gap-4">
+                <dt className={`shrink-0 font-mono text-xs sm:w-44 sm:pt-0.5 ${muted}`}>{s.label}</dt>
+                <dd className={body}>{s.items}</dd>
+              </div>
+            ))}
+          </dl>
         </section>
 
         <footer className={`border-t pt-6 font-mono text-xs ${muted} ${dark ? 'border-zinc-800' : 'border-zinc-300'}`}>
