@@ -81,6 +81,7 @@ const EDUCATION = [
 const SKILLS = ['JavaScript', 'TypeScript', 'Go', 'C', 'React', 'Next.js', 'Node.js', 'MongoDB'];
 
 const SECTIONS = [
+  { id: 'about', label: 'About' },
   { id: 'projects', label: 'Projects' },
   { id: 'writing', label: 'Writing' },
   { id: 'experience', label: 'Experience' },
@@ -101,7 +102,7 @@ export default function Home({ posts }: { posts: Blog[] }) {
       <SiteNav />
 
       <main className="mx-auto max-w-3xl px-4 py-10 md:px-8 md:py-14">
-        <section className="mb-12 flex items-start gap-5">
+        <section className="mb-10 flex flex-col items-start gap-4 sm:flex-row sm:gap-5">
           <Image
             src="/pp.jpg"
             width={72}
@@ -113,10 +114,9 @@ export default function Home({ posts }: { posts: Blog[] }) {
           <div>
             <h1 className="mb-2 font-pixel text-xl md:text-2xl">Shubham Raj</h1>
             <p className={`mb-4 leading-relaxed ${body}`}>
-              Systems programming enthusiast based in Chennai, India. I like figuring out how things work: backend,
-              CPU, memory, networking and everything in between. TypeScript for money, Go and C for fun.
+              Full-stack developer and systems programming enthusiast in Chennai, India.
             </p>
-            <ul className={`flex flex-wrap gap-x-5 gap-y-1 font-mono text-xs ${muted}`}>
+            <ul className={`flex flex-wrap gap-x-5 gap-y-2 font-mono text-sm sm:text-xs ${muted}`}>
               <li><a className={link} href="https://github.com/shubhdevelop" target="_blank" rel="noopener noreferrer">GitHub</a></li>
               <li><a className={link} href="https://twitter.com/_Shubham2XX" target="_blank" rel="noopener noreferrer">X</a></li>
               <li><a className={link} href="https://www.linkedin.com/in/shubhamraj10" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
@@ -128,12 +128,29 @@ export default function Home({ posts }: { posts: Blog[] }) {
         <nav aria-label="Sections" className={`sticky top-[49px] z-10 -mx-4 mb-10 border-b px-4 py-2 backdrop-blur md:-mx-8 md:px-8 ${
           dark ? 'border-zinc-800 bg-[#111]/90' : 'border-zinc-300 bg-[#eae8dc]/90'
         }`}>
-          <ul className={`flex gap-5 font-mono text-xs ${muted}`}>
+          <ul className={`flex gap-4 overflow-x-auto whitespace-nowrap font-mono text-xs [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${muted}`}>
             {SECTIONS.map((s) => (
-              <li key={s.id}><a href={`#${s.id}`} className={`hover:underline underline-offset-4 ${accentHover}`}>{s.label}</a></li>
+              <li key={s.id}><a href={`#${s.id}`} className={`block py-1.5 hover:underline underline-offset-4 ${accentHover}`}>{s.label}</a></li>
             ))}
           </ul>
         </nav>
+
+        <section id="about" className="mb-12">
+          <h2 className={h2}>About</h2>
+          <div className={`space-y-3 text-base leading-7 ${body}`}>
+            <p>
+              I like figuring out how things work: backend, CPU, memory, networking and everything in between.
+              TypeScript pays the bills; Go and C are for fun.
+            </p>
+            <p>
+              At Complyance I build e-invoicing and reporting products. Outside work I write an emulator, a
+              key-value store and an interpreter from scratch, and{' '}
+              <Link href="/blog" className={link}>write about</Link> what I learn along the way, from CPU caches to
+              network protocols.
+            </p>
+            <p>Away from the keyboard: football, cricket, chess and photography.</p>
+          </div>
+        </section>
 
         <section id="projects" className="mb-12">
           <h2 className={h2}>Projects</h2>
@@ -168,7 +185,7 @@ export default function Home({ posts }: { posts: Blog[] }) {
             <ul className={`divide-y ${divide}`}>
               {posts.map((post) => (
                 <li key={post.slug}>
-                  <Link href={post.readLink ?? '#'} className="group flex items-baseline justify-between gap-4 py-3">
+                  <Link href={post.readLink ?? '#'} className="group flex flex-col gap-0.5 py-3 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
                     <span className={`group-hover:underline underline-offset-4 ${dark ? 'group-hover:text-green-400' : 'group-hover:text-red-700'}`}>
                       {post.title}
                     </span>
@@ -192,7 +209,7 @@ export default function Home({ posts }: { posts: Blog[] }) {
           <ul className="space-y-6">
             {EXPERIENCE.map((e) => (
               <li key={`${e.org}-${e.period}`}>
-                <div className="flex flex-wrap items-baseline justify-between gap-x-4">
+                <div className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-x-4">
                   <h3 className="font-semibold">{e.org} <span className={`font-normal ${muted}`}>· {e.role}</span></h3>
                   <span className={`font-mono text-xs ${muted}`}>{e.period}</span>
                 </div>
@@ -206,7 +223,7 @@ export default function Home({ posts }: { posts: Blog[] }) {
           <h2 className={h2}>Education</h2>
           <ul className="space-y-3">
             {EDUCATION.map((e) => (
-              <li key={e.org} className="flex flex-wrap items-baseline justify-between gap-x-4">
+              <li key={e.org} className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-x-4">
                 <span>{e.org} <span className={muted}>· {e.role}</span></span>
                 <span className={`font-mono text-xs ${muted}`}>{e.period}</span>
               </li>
