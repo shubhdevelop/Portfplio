@@ -2,7 +2,8 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getBlogPostBySlug, getAllBlogPosts } from '@/lib/blog';
 import { SITE_NAME, absoluteUrl, blogPath } from '@/lib/site';
-import BlogPostClient from './BlogPostClient';
+import { extractHeadings } from '@/lib/headings';
+import BlogPostClient, { type PostLink } from './BlogPostClient';
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -72,6 +73,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     notFound();
   }
 
+  const all = getAllBlogPosts();
+  const i = all.findIndex((p) => p.slug === post.slug);
+  const toLink = (p?: (typeof all)[number]): PostLink | null =>
+    p ? { slug: p.slug, title: p.title, href: blogPath(p.slug) } : null;
+  const newer = toLink(i > 0 ? all[i - 1] : undefined);
+  const older = toLink(i >= 0 ? all[i + 1] : undefined);
+
   const url = absoluteUrl(blogPath(post.slug));
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -106,7 +114,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         // Escape "<" so post text cannot terminate the script element.
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
       />
-      <BlogPostClient post={post} />
+      <BlogPostClient post={post} headings={extractHeadings(post.content)} newer={newer} older={older} />
     </>
   );
 }

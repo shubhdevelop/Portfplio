@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
+import SiteNav from '@/component/SiteNav';
 import { useTheme } from '@/hooks/theme';
 import { decompose } from '@/lib/cacheAddress';
 
@@ -61,12 +62,8 @@ export default function CacheAddressCalculator() {
 
   return (
     <div className={`min-h-screen transition-colors ${isDarkMode ? 'bg-[#111] text-zinc-100' : 'bg-[#eae8dc] text-zinc-900'}`}>
-      <div className="mx-auto max-w-4xl px-4 py-8 md:px-8 md:py-16">
-        <nav aria-label="Breadcrumb" className={`mb-6 font-mono text-xs ${muted}`}>
-          <Link href="/" className="underline underline-offset-2">Home</Link> /{' '}
-          <Link href="/blog" className="underline underline-offset-2">Blog</Link> / Cache address calculator
-        </nav>
-
+      <SiteNav />
+      <div className="mx-auto max-w-3xl px-4 py-10 md:px-8 md:py-14">
         <h1 className="mb-4 font-pixel text-xl leading-tight md:text-2xl">Cache Tag, Index and Offset Calculator</h1>
         <p className={`mb-8 text-base leading-relaxed ${muted}`}>
           Enter a cache geometry and a memory address to split it into <strong>tag</strong>, <strong>set index</strong> and{' '}

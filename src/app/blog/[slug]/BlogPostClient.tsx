@@ -1,318 +1,209 @@
 "use client";
 
+import 'katex/dist/katex.min.css';
+import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
+import rehypeKatex from 'rehype-katex';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
-import rehypeKatex from 'rehype-katex';
-import 'katex/dist/katex.min.css';
+import SiteNav from '@/component/SiteNav';
 import { useTheme } from '@/hooks/theme';
-import { BlogPost } from '@/lib/blog';
-import { ArrowLeft, Moon, Sun } from 'lucide-react';
-import Link from 'next/link';
+import type { BlogPost } from '@/lib/blog';
+import { type Heading, rehypeHeadingIds } from '@/lib/headings';
+
+export interface PostLink {
+  slug: string;
+  title: string;
+  href: string;
+}
 
 interface BlogPostClientProps {
   post: BlogPost;
+  headings: Heading[];
+  newer: PostLink | null;
+  older: PostLink | null;
 }
 
-function ThemeToggle() {
-  const { isDarkMode, toggleTheme } = useTheme();
-  
+function Toc({ headings, dark }: { headings: Heading[]; dark: boolean }) {
   return (
-    <button 
-      onClick={toggleTheme}
-      className={`p-2 border-2 hover:scale-105 active:scale-95 transition-all ${
-        isDarkMode 
-          ? 'border-zinc-100 text-yellow-400 hover:bg-zinc-800' 
-          : 'border-zinc-900 text-zinc-900 hover:bg-zinc-200'
-      }`}
-      aria-label="Toggle Dark Mode"
-    >
-      {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-    </button>
+    <ul className="space-y-1.5 text-sm">
+      {headings.map((h) => (
+        <li key={h.id} className={h.level === 3 ? 'pl-3' : ''}>
+          <a
+            href={`#${h.id}`}
+            className={`block leading-snug ${
+              dark ? 'text-zinc-400 hover:text-green-400' : 'text-zinc-600 hover:text-red-700'
+            }`}
+          >
+            {h.text}
+          </a>
+        </li>
+      ))}
+    </ul>
   );
 }
 
-export default function BlogPostClient({ post }: BlogPostClientProps) {
-  const { isDarkMode } = useTheme();
+export default function BlogPostClient({ post, headings, newer, older }: BlogPostClientProps) {
+  const { isDarkMode: dark } = useTheme();
+  const muted = dark ? 'text-zinc-400' : 'text-zinc-600';
+  const body = dark ? 'text-zinc-300' : 'text-zinc-700';
+  const heading = dark ? 'text-zinc-100' : 'text-zinc-900';
+  const border = dark ? 'border-zinc-700' : 'border-zinc-300';
+  const accent = dark ? 'text-green-400 hover:text-green-300' : 'text-red-700 hover:text-red-600';
 
   return (
-    <div
-      className={`relative isolate min-h-screen overflow-hidden transition-colors ${
-        isDarkMode
-          ? 'bg-[#111] text-zinc-100'
-          : 'bg-[#eae8dc] text-zinc-900'
-      }`}
-      style={{
-        backgroundImage: isDarkMode
-          ? 'radial-gradient(ellipse 72% 100% at 50% 50%, rgba(39, 39, 42, 0.72) 0%, rgba(39, 39, 42, 0.4) 52%, transparent 100%), radial-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px)'
-          : 'radial-gradient(ellipse 72% 100% at 50% 50%, rgba(253, 251, 247, 0.92) 0%, rgba(253, 251, 247, 0.5) 52%, transparent 100%), radial-gradient(rgba(24, 24, 27, 0.08) 1px, transparent 1px)',
-        backgroundSize: '100% 100%, 24px 24px',
-      }}
-    >
+    <div className={`min-h-screen ${dark ? 'bg-[#111] text-zinc-100' : 'bg-[#eae8dc] text-zinc-900'}`}>
       <style>{`
-        
-        /* KaTeX block math styling */
-        .katex-display {
-          display: block;
-          margin: 1.5em 0 !important;
-          text-align: center;
-          overflow-x: auto;
-          overflow-y: hidden;
-          padding: 1.5em 1em;
-          border-radius: 8px;
-          ${isDarkMode 
-            ? 'background-color: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3);' 
-            : 'background-color: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3);'
-          }
-        }
-        
-        .katex-display > .katex {
-          display: inline-block;
-          text-align: initial;
-        }
-        
-        /* Inline math styling */
-        .katex {
-          font-size: 1.1em;
-        }
-        
-        /* Ensure proper spacing around block math */
-        .katex-display + p,
-        p + .katex-display {
-          margin-top: 1.5em;
-        }
-        
-        /* KaTeX color overrides for dark mode */
-        ${isDarkMode ? `
-          .katex {
-            color: #e4e4e7;
-          }
-          .katex .base {
-            color: #e4e4e7;
-          }
-        ` : `
-          .katex {
-            color: #18181b;
-          }
-          .katex .base {
-            color: #18181b;
-          }
-        `}
+        html { scroll-behavior: smooth; }
+        .post-body h1, .post-body h2, .post-body h3, .post-body h4, .post-body h5 { scroll-margin-top: 5rem; }
+        .katex-display { overflow-x: auto; overflow-y: hidden; margin: 1.25em 0 !important; padding: 0.75em 0; }
+        .katex { font-size: 1.05em; color: ${dark ? '#e4e4e7' : '#18181b'}; }
       `}</style>
 
-      <div className="mx-auto max-w-4xl px-6 py-10 sm:px-10 md:px-16 md:py-20">
-        {/* Back Button and Theme Toggle */}
-        <div className="flex justify-between items-center mb-8">
-          <Link 
-            href="/"
-            className={`inline-flex items-center gap-2 font-pixel text-[10px] uppercase transition-colors ${
-              isDarkMode 
-                ? 'text-green-400 hover:text-green-300' 
-                : 'text-red-700 hover:text-red-600'
-            }`}
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Portfolio
-          </Link>
-          
-          <ThemeToggle />
-        </div>
+      <SiteNav />
 
-        <nav aria-label="Breadcrumb" className={`mb-6 font-mono text-xs ${isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>
-          <ol className="flex flex-wrap items-center gap-2">
-            <li><Link href="/" className="underline underline-offset-2">Home</Link></li>
-            <li aria-hidden="true">/</li>
-            <li><Link href="/blog" className="underline underline-offset-2">Blog</Link></li>
-            <li aria-hidden="true">/</li>
-            <li aria-current="page" className="truncate max-w-[60vw]">{post.title}</li>
-          </ol>
-        </nav>
+      <div className="mx-auto flex max-w-5xl gap-12 px-4 py-8 md:px-8 md:py-12">
+        <main className="min-w-0 max-w-3xl flex-1">
+          <nav aria-label="Breadcrumb" className={`mb-6 font-mono text-xs ${muted}`}>
+            <ol className="flex flex-wrap items-center gap-2">
+              <li><Link href="/" className="hover:underline">Home</Link></li>
+              <li aria-hidden="true">/</li>
+              <li><Link href="/blog" className="hover:underline">Blog</Link></li>
+              <li aria-hidden="true">/</li>
+              <li aria-current="page" className="max-w-[50vw] truncate">{post.title}</li>
+            </ol>
+          </nav>
 
-        {/* Header */}
-        <header className={`mb-8 pb-8 border-b-2 ${
-          isDarkMode ? 'border-zinc-100' : 'border-zinc-900'
-        }`}>
-          <h1 className={`font-pixel text-2xl md:text-3xl mb-4 leading-tight ${
-            isDarkMode ? 'text-zinc-100' : 'text-zinc-900'
-          }`}>
-            {post.title}
-          </h1>
-          
-          <div className="flex flex-wrap items-center gap-4 font-mono text-xs">
-            <time dateTime={post.date} className={isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}>
-              {new Date(post.date).toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-              })}
-            </time>
-            {post.readTime && (
-              <span className={isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}>
-                • {post.readTime}
-              </span>
-            )}
-            {post.author && (
-              <span className={isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}>
-                • {post.author}
-              </span>
-            )}
-          </div>
-
-          {post.tags && post.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-4">
-              {post.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className={`font-pixel text-[8px] uppercase px-2 py-1 border-2 ${
-                    isDarkMode
-                      ? 'border-zinc-100 bg-zinc-800 text-zinc-100'
-                      : 'border-zinc-900 bg-white text-zinc-900'
-                  }`}
-                >
-                  {tag}
-                </span>
-              ))}
+          <header className="mb-8">
+            <h1 className={`mb-4 text-2xl font-bold leading-tight md:text-4xl ${heading}`}>{post.title}</h1>
+            <div className={`flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs ${muted}`}>
+              <time dateTime={post.date}>
+                {new Date(post.date).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                  timeZone: 'UTC',
+                })}
+              </time>
+              {post.readTime && <span>· {post.readTime}</span>}
+              {post.tags.length > 0 && <span>· {post.tags.join(' · ')}</span>}
             </div>
-          )}
-        </header>
+          </header>
 
-        {/* Content */}
-        <article className={`prose prose-lg max-w-none ${
-          isDarkMode 
-            ? 'prose-invert prose-headings:text-zinc-100 prose-p:text-zinc-300 prose-strong:text-zinc-100 prose-code:text-green-400 prose-pre:bg-zinc-800 prose-pre:border prose-pre:border-zinc-100' 
-            : 'prose-headings:text-zinc-900 prose-p:text-zinc-700 prose-strong:text-zinc-900 prose-code:text-red-700 prose-pre:bg-zinc-100 prose-pre:border prose-pre:border-zinc-900'
-        }`}>
-          <ReactMarkdown
-            remarkPlugins={[remarkGfm, remarkMath]}
-            rehypePlugins={[rehypeKatex]}
-            components={{
-              h1: ({ node, ...props }) => (
-                <h1 className={`font-pixel text-xl md:text-2xl mb-4 mt-8 ${isDarkMode ? 'text-zinc-100' : 'text-zinc-900'}`} {...props} />
-              ),
-              h2: ({ node, ...props }) => (
-                <h2 className={`font-pixel text-lg md:text-xl mb-3 mt-6 ${isDarkMode ? 'text-zinc-100' : 'text-zinc-900'}`} {...props} />
-              ),
-              h3: ({ node, ...props }) => (
-                <h3 className={`font-pixel text-base md:text-lg mb-2 mt-4 ${isDarkMode ? 'text-zinc-100' : 'text-zinc-900'}`} {...props} />
-              ),
-              p: ({ node, ...props }) => (
-                <p className={`font-sans text-base leading-relaxed mb-4 ${isDarkMode ? 'text-zinc-300' : 'text-zinc-700'}`} {...props} />
-              ),
-              img: ({ node, ...props }) => (
-                <img
-                  {...props}
-                  className={`my-6 h-auto w-full ${isDarkMode ? 'invert' : ''}`}
-                  loading="lazy"
-                />
-              ),
-              table: ({ node, ...props }) => (
-                <div className={`my-6 overflow-x-auto border-2 ${
-                  isDarkMode ? 'border-zinc-100' : 'border-zinc-900'
-                }`}>
-                  <table className="min-w-full border-collapse font-mono text-sm" {...props} />
-                </div>
-              ),
-              thead: ({ node, ...props }) => (
-                <thead className={isDarkMode ? 'bg-zinc-800 text-zinc-100' : 'bg-zinc-200 text-zinc-900'} {...props} />
-              ),
-              tbody: ({ node, ...props }) => (
-                <tbody {...props} />
-              ),
-              tr: ({ node, ...props }) => (
-                <tr className={`border-t ${isDarkMode ? 'border-zinc-700' : 'border-zinc-300'}`} {...props} />
-              ),
-              th: ({ node, ...props }) => (
-                <th className="whitespace-nowrap px-4 py-3 text-left font-medium" {...props} />
-              ),
-              td: ({ node, ...props }) => (
-                <td className={`whitespace-nowrap px-4 py-3 ${isDarkMode ? 'text-zinc-300' : 'text-zinc-700'}`} {...props} />
-              ),
-              code: ({ node, className, ...props }: any) => {
-                const isInline = !className;
-                return isInline ? (
-                  <code
-                    className={`font-mono text-sm px-1.5 py-0.5 rounded ${
-                      isDarkMode
-                        ? 'bg-zinc-800 text-green-400'
-                        : 'bg-zinc-100 text-red-700'
+          {headings.length > 2 && (
+            <details className={`mb-8 border-y py-3 lg:hidden ${border}`}>
+              <summary className={`cursor-pointer font-mono text-xs uppercase ${muted}`}>On this page</summary>
+              <div className="mt-3">
+                <Toc headings={headings} dark={dark} />
+              </div>
+            </details>
+          )}
+
+          <article className="post-body">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm, remarkMath]}
+              rehypePlugins={[rehypeKatex, rehypeHeadingIds]}
+              components={{
+                h1: ({ node, ...props }) => <h2 className={`mt-10 mb-3 text-2xl font-bold ${heading}`} {...props} />,
+                h2: ({ node, ...props }) => <h2 className={`mt-10 mb-3 text-2xl font-bold ${heading}`} {...props} />,
+                h3: ({ node, ...props }) => <h3 className={`mt-8 mb-2 text-xl font-semibold ${heading}`} {...props} />,
+                h4: ({ node, ...props }) => <h4 className={`mt-6 mb-2 text-lg font-semibold ${heading}`} {...props} />,
+                h5: ({ node, ...props }) => <h5 className={`mt-6 mb-2 text-base font-semibold ${heading}`} {...props} />,
+                h6: ({ node, ...props }) => <h6 className={`mt-4 mb-2 text-base font-semibold ${heading}`} {...props} />,
+                p: ({ node, ...props }) => <p className={`mb-4 text-base leading-7 ${body}`} {...props} />,
+                strong: ({ node, ...props }) => <strong className={`font-semibold ${heading}`} {...props} />,
+                img: ({ node, alt, ...props }) => (
+                  // biome-ignore lint/performance/noImgElement: markdown images are plain SVG/static assets
+                  <img
+                    {...props}
+                    alt={alt ?? ''}
+                    className={`my-6 h-auto w-full ${dark ? 'invert' : ''}`}
+                    loading="lazy"
+                  />
+                ),
+                table: ({ node, ...props }) => (
+                  <div className={`my-6 overflow-x-auto border ${border}`}>
+                    <table className="min-w-full border-collapse font-mono text-sm" {...props} />
+                  </div>
+                ),
+                thead: ({ node, ...props }) => <thead className={dark ? 'bg-zinc-800' : 'bg-zinc-200'} {...props} />,
+                tr: ({ node, ...props }) => <tr className={`border-t ${border}`} {...props} />,
+                th: ({ node, ...props }) => <th className="px-3 py-2 text-left font-medium" {...props} />,
+                td: ({ node, ...props }) => <td className={`px-3 py-2 ${body}`} {...props} />,
+                code: ({ node, className, ...props }) =>
+                  className ? (
+                    <code className={className} {...props} />
+                  ) : (
+                    <code
+                      className={`rounded px-1.5 py-0.5 font-mono text-[0.9em] ${
+                        dark ? 'bg-zinc-800 text-green-400' : 'bg-zinc-200 text-red-700'
+                      }`}
+                      {...props}
+                    />
+                  ),
+                pre: ({ node, ...props }) => (
+                  <pre
+                    className={`mb-5 overflow-x-auto rounded border p-4 font-mono text-sm ${
+                      dark ? 'border-zinc-700 bg-zinc-900' : 'border-zinc-300 bg-[#fdfbf7]'
                     }`}
                     {...props}
                   />
-                ) : (
-                  <code className={className} {...props} />
-                );
-              },
-              pre: ({ node, ...props }) => (
-                <pre
-                  className={`font-mono text-sm p-4 rounded-lg overflow-x-auto mb-4 border-2 ${
-                    isDarkMode
-                      ? 'bg-zinc-800 border-zinc-100'
-                      : 'bg-zinc-100 border-zinc-900'
-                  }`}
-                  {...props}
-                />
-              ),
-              a: ({ node, href, ...props }) => {
-                const linkClass = `underline decoration-2 underline-offset-2 ${
-                  isDarkMode
-                    ? 'text-green-400 hover:text-green-300'
-                    : 'text-red-700 hover:text-red-600'
-                }`;
-                if (href?.startsWith('/')) {
-                  return <Link href={href} className={linkClass}>{props.children}</Link>;
-                }
-                return (
-                  <a
-                    href={href}
-                    className={linkClass}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    {...props}
-                  />
-                );
-              },
-              ul: ({ node, ...props }) => (
-                <ul className={`list-disc list-outside mb-4 ml-6 space-y-2 ${isDarkMode ? 'text-zinc-300' : 'text-zinc-700'}`} {...props} />
-              ),
-              ol: ({ node, ...props }) => (
-                <ol className={`list-decimal list-outside mb-4 ml-6 space-y-2 ${isDarkMode ? 'text-zinc-300' : 'text-zinc-700'}`} {...props} />
-              ),
-              li: ({ node, ...props }) => (
-                <li className={`font-sans pl-2 leading-relaxed ${isDarkMode ? 'text-zinc-300' : 'text-zinc-700'}`} {...props} />
-              ),
-              blockquote: ({ node, ...props }) => (
-                <blockquote
-                  className={`border-l-4 pl-4 my-4 italic ${
-                    isDarkMode
-                      ? 'border-zinc-100 text-zinc-400'
-                      : 'border-zinc-900 text-zinc-600'
-                  }`}
-                  {...props}
-                />
-              ),
-              div: ({ node, className, ...props }: any) => {
-                // Handle KaTeX block math divs
-                if (className?.includes('katex-display') || className?.includes('math')) {
+                ),
+                a: ({ node, href, children, ...props }) => {
+                  const cls = `underline decoration-1 underline-offset-2 ${accent}`;
+                  if (href?.startsWith('/')) {
+                    return <Link href={href} className={cls}>{children}</Link>;
+                  }
+                  if (href?.startsWith('#')) {
+                    return <a href={href} className={cls} {...props}>{children}</a>;
+                  }
                   return (
-                    <div 
-                      className={`my-6 overflow-x-auto rounded-lg ${
-                        isDarkMode 
-                          ? 'bg-green-500/10 border border-green-500/30' 
-                          : 'bg-red-500/10 border border-red-500/30'
-                      }`}
-                      {...props} 
-                    />
+                    <a href={href} className={cls} target="_blank" rel="noopener noreferrer" {...props}>
+                      {children}
+                    </a>
                   );
-                }
-                return <div {...props} />;
-              },
-            }}
-          >
-            {post.content}
-          </ReactMarkdown>
-        </article>
+                },
+                ul: ({ node, ...props }) => <ul className={`mb-4 ml-6 list-disc space-y-1.5 ${body}`} {...props} />,
+                ol: ({ node, ...props }) => <ol className={`mb-4 ml-6 list-decimal space-y-1.5 ${body}`} {...props} />,
+                li: ({ node, ...props }) => <li className="pl-1 leading-7" {...props} />,
+                blockquote: ({ node, ...props }) => (
+                  <blockquote className={`my-4 border-l-4 pl-4 ${border} ${muted}`} {...props} />
+                ),
+              }}
+            >
+              {post.content}
+            </ReactMarkdown>
+          </article>
+
+          {(newer || older) && (
+            <nav aria-label="More posts" className={`mt-14 grid gap-4 border-t pt-6 sm:grid-cols-2 ${border}`}>
+              {older ? (
+                <Link href={older.href} className="group block">
+                  <span className={`font-mono text-xs ${muted}`}>← Older</span>
+                  <span className={`block font-semibold group-hover:underline ${heading}`}>{older.title}</span>
+                </Link>
+              ) : (
+                <span />
+              )}
+              {newer && (
+                <Link href={newer.href} className="group block sm:text-right">
+                  <span className={`font-mono text-xs ${muted}`}>Newer →</span>
+                  <span className={`block font-semibold group-hover:underline ${heading}`}>{newer.title}</span>
+                </Link>
+              )}
+            </nav>
+          )}
+        </main>
+
+        {headings.length > 2 && (
+          <aside className="hidden w-56 shrink-0 lg:block">
+            <div className="sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto">
+              <p className={`mb-3 font-mono text-xs uppercase ${muted}`}>On this page</p>
+              <Toc headings={headings} dark={dark} />
+            </div>
+          </aside>
+        )}
       </div>
     </div>
   );
 }
-
